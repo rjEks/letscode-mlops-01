@@ -29,6 +29,7 @@ jobs:
         run: | 
           aws cloudformation deploy \
             --stack-name mlops-lambda-pipeline-stack \
+            --no-fail-on-empty-changeset \
             --template-file lambda.yml \
             --capabilities CAPABILITY_NAMED_IAM
 
