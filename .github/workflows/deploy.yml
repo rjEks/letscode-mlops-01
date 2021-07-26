@@ -1,0 +1,35 @@
+name: MLOps Lambda Container Pipeline
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-20.04
+    steps:      
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Configure AWS credentials from your account
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-west-2
+
+      - name: Build e Push da imagem Docker
+        run: |
+          aws ecr get-login-password --region us-west-2 | docker login --username AWS --password-stdin ${{ secrets.ACCOUNT_ID }}.dkr.ecr.us-west-2.amazonaws.com
+          docker build -t mlops-lambda-pipeline .
+          docker tag mlops-lambda-pipeline:latest ${{ secrets.ACCOUNT_ID }}.dkr.ecr.us-west-2.amazonaws.com/mlops-lambda-pipeline:latest
+          docker push ${{ secrets.ACCOUNT_ID }}.dkr.ecr.us-west-2.amazonaws.com/mlops-lambda-pipeline:latest
+
+      - name: Cria ou Atualiza a Função Lambda
+        run: | 
+          aws cloudformation deploy \
+            --stack-name mlops-lambda-pipeline-stack \
+            --template-file lambda.yml \
+            --capabilities CAPABILITY_NAMED_IAM
+
+

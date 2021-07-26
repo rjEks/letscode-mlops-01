@@ -1,0 +1,52 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: Lambda Container
+Resources:
+  Function:
+    Type: AWS::Lambda::Function
+    Properties:
+      FunctionName: mlops-lambda-container
+      Role: !GetAtt Role.Arn
+      PackageType: Image
+      Code:
+        ImageUri: 133562267374.dkr.ecr.us-west-2.amazonaws.com/mlops-lambda-pipeline:latest
+      Timeout: 90
+  Role:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: mlops-lambda-role
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - lambda.amazonaws.com
+            Action:
+              - 'sts:AssumeRole'
+      Path: /
+      Policies:
+        - PolicyName: discovery-lambda-policy
+          PolicyDocument:
+            Version: 2012-10-17
+            Statement:
+              - Effect: Allow
+                Action: 
+                  - "cloudwatch:*"
+                  - "ec2:DescribeSecurityGroups"
+                  - "ec2:DescribeSubnets"
+                  - "ec2:DescribeVpcs"
+                  - "events:*"
+                  - "iam:GetPolicy"
+                  - "iam:GetPolicyVersion"
+                  - "iam:GetRole"
+                  - "iam:GetRolePolicy"
+                  - "iam:ListAttachedRolePolicies"
+                  - "iam:ListRolePolicies"
+                  - "iam:ListRoles"
+                  - "iam:PassRole"
+                  - "kms:ListAliases"
+                  - "lambda:*"
+                  - "logs:*"
+                  - "tag:GetResources"
+                Resource: '*'
+      MaxSessionDuration: 3600 
