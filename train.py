@@ -2,6 +2,8 @@
 # -*- coding: utf-8 -*-
 
 from sklearn import svm, datasets
+#Joblib para objetos com numpy e matrizes
+# Pickle Objetos Python Padrao
 import joblib 
 import numpy as np
 
