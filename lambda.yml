@@ -8,7 +8,7 @@ Resources:
       Role: !GetAtt Role.Arn
       PackageType: Image
       Code:
-        ImageUri: 133562267374.dkr.ecr.us-west-2.amazonaws.com/mlops-lambda-container780:latest
+        ImageUri: 133562267374.dkr.ecr.us-west-2.amazonaws.com/mlops-lambda-container-735:latest
       Timeout: 90
   Role:
     Type: AWS::IAM::Role
