@@ -22,7 +22,7 @@ jobs:
         run: |
           aws ecr get-login-password --region us-west-2 | docker login --username AWS --password-stdin ${{ secrets.ACCOUNT_ID }}.dkr.ecr.us-west-2.amazonaws.com
           docker build -t mlops-lambda-container-735 .
-          docker tag mlops-lambda-container780:latest ${{ secrets.ACCOUNT_ID }}.dkr.ecr.us-west-2.amazonaws.com/mlops-lambda-container-735:latest
+          docker tag mlops-lambda-container-735:latest ${{ secrets.ACCOUNT_ID }}.dkr.ecr.us-west-2.amazonaws.com/mlops-lambda-container-735:latest
           docker push ${{ secrets.ACCOUNT_ID }}.dkr.ecr.us-west-2.amazonaws.com/mlops-lambda-container-735:latest
 
       - name: Cria ou Atualiza a Função Lambda
